@@ -1,0 +1,18 @@
+{
+  "plugins": ["testing-library", "unused-imports", "prettier"],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "no-unused-vars": "off",
+    "prettier/prettier": "warn",
+    "no-use-before-define": 0,
+    "no-console": [
+      2,
+      {
+        "allow": ["warn", "error"]
+      }
+    ]
+  }
+}

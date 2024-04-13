@@ -1,0 +1,25 @@
+{
+  "name": "nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore -f json"
+  },
+  "dependencies": {
+    "@next/font": "13.1.6",
+    "eslint": "8.32.0",
+    "eslint-config-next": "13.1.6",
+    "next": "13.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.0",
+    "eslint-plugin-testing-library": "^5.10.0",
+    "eslint-plugin-unused-imports": "^2.0.0"
+  }
+}

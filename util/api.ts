@@ -70,3 +70,6 @@ export const getOptimismWalletStatus = async (wallet: any) => {
 export const getOptimismWalletToken = async (wallet: any) => {
   return getData(`/optimism-wallet-token`, { wallet })
 }
+export const getOptimismWalletTransaction = async (wallet: any) => {
+  return getData(`/optimism-wallet-transaction`, { wallet })
+}

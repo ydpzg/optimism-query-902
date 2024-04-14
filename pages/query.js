@@ -1,12 +1,13 @@
-import { Card, Skeleton, Typography } from "antd";
+import { Card, Skeleton, Table, Typography } from "antd";
 import TitleAndBack from "../component/TitleAndBack";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import _ from "lodash";
 import ReactECharts from "echarts-for-react";
 import { useQuery } from "react-query";
-import { getOptimismWalletStatus, getOptimismWalletToken } from "../util/api";
+import { getOptimismWalletStatus, getOptimismWalletToken, getOptimismWalletTransaction } from "../util/api";
 import { queryOption } from "../util/query-option";
+import { formatUTCTime, getTimeAgo } from "../util/format";
 
 const Query = () => {
   const router = useRouter()
@@ -24,8 +25,12 @@ const Query = () => {
     },
     {...queryOption, enabled: !!wallet }
   )
-  const isLoading = false
-
+  const walletTokenTransactionResult = useQuery([ 'getOptimismWalletTransaction' ],
+    async () => {
+      return await getOptimismWalletTransaction(wallet)
+    },
+    {...queryOption, enabled: !!wallet }
+  )
 
   function transformData(data) {
     if (!data) {
@@ -41,10 +46,28 @@ const Query = () => {
     })
   }
 
+  function transformData2(data) {
+    if (!data) {
+      return null
+    }
+    // 从data中获取rows和cols
+    const { rows, cols } = data;
+    // 映射cols数组，创建key-value对象
+    const temp = rows.map(r => {
+      return cols.map((col, index) => {
+        return { key: col.name, value: r[index] };
+      });
+    })
+    const transformedArray = _.map(temp, obj => {
+      return _.fromPairs(_.map(obj, obj2 => [obj2.key, obj2.value]))
+    });
+    return transformedArray
+  }
 
-  const transformeStatusData = transformData(walletStatusResult?.data);
+
+  const transformedStatusData = transformData(walletStatusResult?.data);
   const transformedTokenData = transformData(walletTokenResult?.data);
-  console.log(transformeStatusData);
+  const transformedTransactionData = transformData2(walletTokenTransactionResult?.data);
 
   const renderWalletStatus = (data) => {
     return (
@@ -120,7 +143,7 @@ const Query = () => {
             style={{ height: '100%', width: '100%' }}
             option={{
               title: {
-                text: 'Token Buy Top Amount',
+                text: 'Token In Top Amount',
                 right: '5%'
               },
               tooltip: {
@@ -163,7 +186,7 @@ const Query = () => {
             style={{ height: '100%', width: '100%' }}
             option={{
               title: {
-                text: 'Token Sell Top Amount',
+                text: 'Token Out Top Amount',
                 right: '5%'
               },
               tooltip: {
@@ -201,21 +224,71 @@ const Query = () => {
     )
   }
 
-  return (
-    <div className="flex min-h-screen flex-col p-24 " style={{ width: "100%", margin: "0 auto" }}>
-      <TitleAndBack title="Scan Another Wallet"/>
-      {walletStatusResult?.isLoading || walletTokenResult?.isLoading ? (<Skeleton active/>) :
-        (
-          <div className="flex flex-col">
-            <div className="flex gap-4 items-baseline text-gray-400 my-4">
-              Wallet Address: <Link className="text-2xl text-white underline" target="_blank"
-                                    href={`https://optimistic.etherscan.io/address/${wallet}`}>{wallet}</Link>
-            </div>
-            {renderWalletStatus(transformeStatusData)}
-            {renderWalletToken(transformedTokenData)}
-          </div>
-        )}
+  const renderWalletTransaction = (data) => {
+    console.log("data", data)
 
+    const columns = [
+      {
+        title: 'Hash',
+        dataIndex: 'hash',
+        key: 'hash',
+        render: (text) => <Link className="underline" href={`https://optimistic.etherscan.io/tx/${text}`}>{formatAddress(text) || "--"}</Link>,
+      },
+      {
+        title: 'From Address',
+        dataIndex: "from_address",
+        key: "from_address",
+        render: (text) => <Link className="underline" href={`https://optimistic.etherscan.io/address/${text}`}>{formatAddress(text) || "--"}</Link>,
+      },
+      {
+        title: 'To Address',
+        dataIndex: "to_address",
+        key: "to_address",
+        render: (text) => <Link className="underline" href={`https://optimistic.etherscan.io/address/${text}`}>{formatAddress(text) || "--"}</Link>,
+      },
+      {
+        title: 'Block Number',
+        dataIndex: "block_number",
+        key: "block_number",
+      },
+      {
+        title: 'Value',
+        dataIndex: "value",
+        key: "value",
+      },
+      {
+        title: 'Gas',
+        dataIndex: "gas",
+        key: "gas",
+      },
+      {
+        title: 'Timestamp',
+        dataIndex: "block_timestamp",
+        key: "block_timestamp",
+        render: (text) => <div>{getTimeAgo(Date.parse(text))} ({formatUTCTime(Date.parse(text) / 1000)})</div>,
+      },
+    ];
+    return (
+      <div className={"flex flex-col"}>
+        <Typography.Text className="text-xl p-4">Transactions (7D)</Typography.Text>
+
+        <Table dataSource={data} columns={columns} />
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col px-48 pt-8 " style={{ width: "100%", margin: "0 auto" }}>
+      <TitleAndBack title="Scan other Wallet"/>
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-4 items-baseline text-gray-400 my-4">
+          Wallet Address: <Link className="text-2xl text-white underline" target="_blank"
+                                href={`https://optimistic.etherscan.io/address/${wallet}`}>{wallet}</Link>
+        </div>
+        {walletStatusResult?.isLoading ?  (<Skeleton active/>) : renderWalletStatus(transformedStatusData)}
+        {walletTokenResult?.isLoading ?  (<Skeleton  className="mt-20" active/>) : renderWalletToken(transformedTokenData)}
+        {walletTokenTransactionResult?.isLoading ?  (<Skeleton  className="mt-20" active/>) : renderWalletTransaction(transformedTransactionData)}
+      </div>
     </div>
   )
 }

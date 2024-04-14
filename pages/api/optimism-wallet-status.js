@@ -2,7 +2,7 @@
 
 import axios from "axios";
 /**
- * 5WX13KMWS19MNAND7THE7HZABFS1N3AV21
+ * https://www.footprint.network/chart/Optimism-w-status-fp-48346
  */
 export default async function handler(req, res) {
   if (req.method !== "GET") {

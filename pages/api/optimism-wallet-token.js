@@ -2,11 +2,7 @@
 
 import axios from "axios";
 /**
- *
- * curl --request GET \
- *      --url 'https://api.footprint.network/api/v3/address/getWalletTxnStats?chain=Ethereum&wallet_address=0x46efbaedc92067e6d60e84ed6395099723252496' \
- *      --header 'accept: application/json' \
- *      --header 'api-key: 76ob3jLbdcNIyZ9oh8Pum78aYwRybwX4W3Pz5hjeBeJqyruLmPnWymvzGCkqvI6U'
+ * https://www.footprint.network/chart/Optimism-token-show-fp-48351
  */
 export default async function handler(req, res) {
   if (req.method !== "GET") {

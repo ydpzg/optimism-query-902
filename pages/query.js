@@ -1,6 +1,6 @@
-import { getTopGame } from "./util/api";
+import { getTopGame } from "../util/api";
 import { useQuery } from "react-query";
-import { queryOption } from "./util/query-option";
+import { queryOption } from "../util/query-option";
 
 const Query = () => {
   const { data } = useQuery([ 'getTopGame' ],

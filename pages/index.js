@@ -20,7 +20,7 @@ export default function Home() {
       </Head>
       <div className={"flex flex-col justify-center items-center gap-8"} style={{ height: 400 }}>
         <div className="flex gap-2">
-          <img src="https://statichk.footprint.network/fp-chains/optimism.webp" style={{ width: 48, height: 48 }}/>
+          <img src="https://static.footprint.network/fp-chains/optimism.webp" style={{ width: 48, height: 48 }}/>
           <h1 className="text-5xl">Optimism Wallet Tracker</h1>
         </div>
         <Input value="0xacD03D601e5bB1B275Bb94076fF46ED9D753435A" size="large" placeholder="Input your wallet address" style={{ width: 480 }} onChange={(e) => {

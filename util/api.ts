@@ -61,9 +61,6 @@ const filterParams = (params: any) => {
     return isNil(value) || isNull(value) || value === ''
   })
 }
-export const getTopGame = async () => {
-  return getData(`/top-game`)
-}
 export const getOptimismWalletStatus = async (wallet: any) => {
   return getData(`/optimism-wallet-status`, { wallet })
 }

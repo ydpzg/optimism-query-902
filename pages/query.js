@@ -75,7 +75,7 @@ const Query = () => {
         <Typography.Text className="text-xl p-4">Overview</Typography.Text>
         <div className="flex gap-2">
           <div className="flex flex-col gap-2 w-full flex-wrap">
-            {_.get(data, "0")?.filter(i => [ "transaction_count", "contract_count" ].includes(i.key)).map((item) => {
+            {_.get(data, "0")?.filter(i => [ "transaction_count", "contract_count" ].includes(i.key))?.map((item) => {
               return (
                 <Card className="flex justify-center items-center" key={item.key}
                       style={{ flex: "1 1 calc(33.333% - 10px)" }}>
@@ -90,7 +90,7 @@ const Query = () => {
             })}
           </div>
           <div className="flex flex-col gap-2 w-full flex-wrap">
-            {_.get(data, "0")?.filter(i => [ "active_count_days", "active_count_weeks", "active_count_months" ].includes(i.key)).map((item) => {
+            {_.get(data, "0")?.filter(i => [ "active_count_days", "active_count_weeks", "active_count_months" ].includes(i.key))?.map((item) => {
               return (
                 <Card className="flex justify-center items-center" key={item.key}
                       style={{ flex: "1 1 calc(33.333% - 10px)" }}>
@@ -105,7 +105,7 @@ const Query = () => {
             })}
           </div>
           <div className="flex flex-col gap-2 w-full flex-wrap">
-            {_.get(data, "0")?.filter(i => [ "oldest_block_date", "newest_block_date" ].includes(i.key)).map((item) => {
+            {_.get(data, "0")?.filter(i => [ "oldest_block_date", "newest_block_date" ].includes(i.key))?.map((item) => {
               return (
                 <Card className="flex justify-center items-center" key={item.key}
                       style={{ flex: "1 1 calc(33.333% - 10px)" }}>
@@ -129,6 +129,9 @@ const Query = () => {
   }
 
   const renderWalletToken = (data) => {
+    if (!data) {
+      return null
+    }
     return (
       <div className={"flex flex-col"}>
         <Typography.Text className="text-xl p-4">Token (30D)</Typography.Text>
@@ -225,7 +228,9 @@ const Query = () => {
   }
 
   const renderWalletTransaction = (data) => {
-    console.log("data", data)
+    if (!data) {
+      return null
+    }
 
     const columns = [
       {

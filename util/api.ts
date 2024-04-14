@@ -64,3 +64,9 @@ const filterParams = (params: any) => {
 export const getTopGame = async () => {
   return getData(`/top-game`)
 }
+export const getOptimismWalletStatus = async (wallet: any) => {
+  return getData(`/optimism-wallet-status`, { wallet })
+}
+export const getOptimismWalletToken = async (wallet: any) => {
+  return getData(`/optimism-wallet-token`, { wallet })
+}

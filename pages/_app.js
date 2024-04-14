@@ -1,6 +1,8 @@
-// import "@/styles/globals.css";
+import "../styles/globals.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import {StyleProvider} from '@ant-design/cssinjs'
+import { ConfigProvider } from "antd";
+import {theme} from 'antd'
 
 export default function App({ Component, pageProps }) {
   const queryClient = new QueryClient()
@@ -8,7 +10,11 @@ export default function App({ Component, pageProps }) {
     <>
       <StyleProvider hashPriority="low">
         <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
+          <ConfigProvider theme={{
+            algorithm: theme.darkAlgorithm,
+          }}>
+            <Component {...pageProps} />
+          </ConfigProvider>
         </QueryClientProvider>
       </StyleProvider>
     </>

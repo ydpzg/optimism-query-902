@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Inter } from "@next/font/google";
 import "../styles/index.module.css";
 import Link from "next/link";
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 import FeatherIcon from "feather-icons-react";
 import { useState } from "react";
 
@@ -10,6 +10,10 @@ const inter = Inter({ subsets: [ "latin" ] });
 
 export default function Home() {
   const [ wallet, setWallet ] = useState("0xacD03D601e5bB1B275Bb94076fF46ED9D753435A");
+  const isAddressValid = (address) => {
+    const re = /^0x[a-fA-F0-9]{40}$/;
+    return re.test(address);
+  };
   return (
     <>
       <Head>
@@ -23,12 +27,22 @@ export default function Home() {
           <img src="https://static.footprint.network/fp-chains/optimism.webp" style={{ width: 48, height: 48 }}/>
           <h1 className="text-5xl">Optimism Wallet Tracker</h1>
         </div>
-        <Input value="0xacD03D601e5bB1B275Bb94076fF46ED9D753435A" size="large" placeholder="Input your wallet address" style={{ width: 480 }} onChange={(e) => {
+        <Input value={wallet} size="large" placeholder="Input your wallet address" style={{ width: 480 }} onChange={(e) => {
           setWallet(e.target.value)
         }}/>
         <Link href={`/query?wallet=${wallet}`}>
           <Button className="flex justify-center items-center" size="large" style={{ width: 160 }}
-                  icon={<FeatherIcon icon="search"/>}>Scan</Button>
+                  icon={<FeatherIcon icon="search"/>} onClick={(event) => {
+            if (isAddressValid(wallet)) {
+              console.log('Address is correct, proceed with the action');
+              // 在这里放置允许的操作
+            } else {
+              console.log('Access denied, address is not correct');
+              // 在这里处理不允许的情况，比如显示错误消息
+              event.preventDefault();
+              message.error('Invalid address');
+            }
+          }}>Scan</Button>
         </Link>
         <Link className="underline" href="https://optimistic.etherscan.io/accounts" target="_blank">Top Account</Link>
       </div>
